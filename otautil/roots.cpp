@@ -45,6 +45,8 @@
 #include "otautil/mounts.h"
 #include "otautil/sysutil.h"
 
+#include <mt_roots.h>
+
 using android::fs_mgr::Fstab;
 using android::fs_mgr::FstabEntry;
 using android::fs_mgr::ReadDefaultFstab;
@@ -59,6 +61,8 @@ void load_volume_table() {
 
   fstab.emplace_back(FstabEntry{
       .mount_point = "/tmp", .fs_type = "ramdisk", .blk_device = "ramdisk", .length = 0 });
+
+  mt_load_volume_table(&fstab);
 
   std::cout << "recovery filesystem table" << std::endl << "=========================" << std::endl;
   for (size_t i = 0; i < fstab.size(); ++i) {

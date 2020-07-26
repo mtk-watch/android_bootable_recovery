@@ -50,6 +50,7 @@ cc_library_static {
 
             include_dirs: [
                 "system/vold",
+                "vendor/mediatek/proprietary/bootable/recovery/utils/include",
             ],
 
             static_libs: [

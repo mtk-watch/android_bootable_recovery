@@ -147,6 +147,9 @@ int main(int argc, char** argv) {
     fprintf(cmd_pipe, "ui_print Warning: No file_contexts\n");
   }
 
+  LOG(INFO) << "====== Updater-Script:";
+  LOG(INFO) << script;
+
   // Evaluate the parsed script.
 
   UpdaterInfo updater_info;

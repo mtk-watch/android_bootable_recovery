@@ -43,11 +43,14 @@ cc_defaults {
 
     static_libs: [
         "libotautil",
-
+        "libpartition",
         // external dependencies
         "libvintf_recovery",
         "libvintf",
         "libfstab",
+    ],
+    include_dirs: [
+        "vendor/mediatek/proprietary/bootable/recovery/utils/include",
     ],
 }
 

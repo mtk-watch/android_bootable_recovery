@@ -57,6 +57,8 @@
 #include "private/setup_commands.h"
 #include "recovery_ui/ui.h"
 
+#include <mt_install.h>
+
 using namespace std::chrono_literals;
 
 static constexpr int kRecoveryApiVersion = 3;
@@ -335,6 +337,16 @@ static int try_update_binary(const std::string& package, ZipArchiveHandle zip, b
   }
 
   bool is_ab = android::base::GetBoolProperty("ro.build.ab_update", false);
+
+  // Check partition size between source and target for non-A/B
+  if (!is_ab) {
+    int ret=INSTALL_SUCCESS;
+    if (mt_really_install_package_check_part_size(ret, package.c_str(), zip)) {
+      CloseArchive(zip);
+      return ret;
+    }
+  }
+
   // Verifies against the metadata in the package first.
   if (int check_status = is_ab ? CheckPackageMetadata(metadata, OtaType::AB) : 0;
       check_status != 0) {
@@ -588,7 +600,15 @@ static int really_install_package(const std::string& path, bool* wipe_cache, boo
     if (path[0] == '@') {
       ensure_path_mounted(path.substr(1));
     } else {
-      ensure_path_mounted(path);
+      int retry = 0;
+      for (; retry <= 3; retry++) {
+        if (ensure_path_mounted(path) == 0) {
+          break;
+        } else {
+          ui->Print("Slow SD retry %d\n", retry);
+          sleep(1);
+        }
+      }
     }
   }
 

@@ -211,7 +211,7 @@ static InstallResult prompt_and_wipe_data(Device* device) {
     }
 
     if (ask_to_wipe_data(device)) {
-      bool convert_fbe = reason && strcmp(reason, "convert_fbe") == 0;
+      bool convert_fbe = reason && strncmp(reason, "convert_fbe", strlen("convert_fbe")) == 0;
       if (WipeData(device, convert_fbe)) {
         return INSTALL_SUCCESS;
       } else {
@@ -914,7 +914,7 @@ Device::BuiltinAction start_recovery(Device* device, const std::vector<std::stri
     }
   } else if (should_wipe_data) {
     save_current_log = true;
-    bool convert_fbe = reason && strcmp(reason, "convert_fbe") == 0;
+    bool convert_fbe = reason && strncmp(reason, "convert_fbe", strlen("convert_fbe")) == 0;
     if (!WipeData(device, convert_fbe)) {
       status = INSTALL_ERROR;
     }

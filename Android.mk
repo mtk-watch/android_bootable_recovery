@@ -44,7 +44,15 @@ LOCAL_WHOLE_STATIC_LIBRARIES := \
 LOCAL_SHARED_LIBRARIES := \
     libbase \
     liblog \
+    libfs_mgr \
+    libext4_utils \
+    libziparchive \
     librecovery_ui.recovery
+
+LOCAL_STATIC_LIBRARIES := \
+    librecovery \
+    libpartition \
+    libotautil
 
 include $(BUILD_SHARED_LIBRARY)
 
